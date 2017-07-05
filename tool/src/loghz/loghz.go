@@ -11,7 +11,15 @@ const(
 	TIME_FORMAT="2006-01-02 15:04"
 )
 
+type logDebug struct{
+	IfPrintln bool
+}
+
 //var IfPrintln bool=false
+
+func NewLogDebug(ifprintln bool)*logDebug{
+	return &logDebug{ifprintln}
+}
 
 // about depth:please find api :package runtime
 //output func name ,file name,line num
@@ -28,7 +36,7 @@ func fileLine(depth int)(string,string,int){
 }
 
 // println，显示行号和列号，方便调试
-func Println(t ...interface{}){
+func (ll *logDebug)Println(t ...interface{}){
 	/*
 	if !IfPrintln{
 		return
@@ -54,11 +62,11 @@ func Println(t ...interface{}){
 	fmt.Printf(" %c[1;40;34m%s()%c[0m", 0x1B, funcname, 0x1B)
 //	fmt.Printf("[[PRINT] 0x1B[1;40;32m%s0x1B[0m :%d:'%s()']",file,line,funcname)
 	fmt.Printf("--->")
-	fmt.Printf(" %c[1;40;32m%s%c[0m\n", 0x1B, t, 0x1B)
+	fmt.Println(fmt.Sprintf("%+v\n",t))
 
 }
 // 错误输出。带行号，方便检查错误和异常
-func Error(err error){
+func (ll *logDebug)Error(err error){
 	if err==nil{
 		return
 	}
