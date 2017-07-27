@@ -1,19 +1,14 @@
-package main
+package netTool
 
 import (
-	"fmt"
 	"net"
 	"strings"
 )
 
-var HostIp = getIp()
-var ServerName = getServerName()
+var HostIp = GetIp()
+var ServerName = GetIp()
 
-func main() {
-	fmt.Println(getIp())
-}
-
-func getIp() string {
+func GetIp() string {
 	addrs, err := net.InterfaceAddrs()
 	if err != nil {
 		panic(err)
@@ -32,7 +27,8 @@ func getIp() string {
 	panic(addrs)
 }
 
-func getServerName() string {
-	// return "etlog"
-	return getIp()
+func GetIpByUrl(url string) ([]net.IP, error) {
+	ns, err := net.LookupIP(url)
+	return ns, err
+
 }

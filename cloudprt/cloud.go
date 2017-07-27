@@ -1,12 +1,15 @@
 package cloudprt
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strconv"
+	"unicode"
 )
 
 const (
@@ -198,4 +201,45 @@ func (prt *Prt) GetPrtStatus() (*QueryResp, error) {
 			return &resp, nil
 		}
 	}
+}
+
+// 对小票的商品部分格式化
+//for ( GOODS.... ){
+//formatName(buf,name,price,num,total)
+//}
+func formatName(buf *bytes.Buffer, name string, priceStr, numStr, totalNowStr string) {
+	var weight int = 0
+	var supWeight int = 0
+	for _, r := range name {
+		if unicode.Is(unicode.Scripts["Han"], r) {
+			weight += weightHan
+		} else {
+			weight += weightOther
+		}
+	}
+	fmt.Println("weight:", weight)
+
+	if weight <= maxWeight {
+		supWeight = maxWeight - weight
+		if supWeight > 0 {
+			for i := 0; i < supWeight; i++ {
+				name = name + " "
+			}
+		}
+		buf.WriteString(fmt.Sprintf("%s", name))
+		buf.WriteString(fmt.Sprintf("%5s\t\t\t%2s\t%5s\n", priceStr, numStr, totalNowStr))
+
+	} else {
+		buf.WriteString(fmt.Sprintf("%s\n", name))
+		buf.WriteString(fmt.Sprintf("%s%5s\t\t\t%2s\t%5s\n", createSpace(maxWeight), priceStr, numStr, totalNowStr))
+	}
+}
+
+// 产生空格
+func createSpace(len int) string {
+	var space string
+	for i := 0; i < maxWeight; i++ {
+		space = space + " "
+	}
+	return space
 }
