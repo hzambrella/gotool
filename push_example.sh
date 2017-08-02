@@ -6,6 +6,7 @@ git add .
 git status
 git commit -m"$val"
 git status
+git pull
 #read -p "are you sure to commit ?[Y/N]"val2
 set timeout 30
 expect <<!
