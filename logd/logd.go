@@ -1,4 +1,4 @@
-package logz
+package logd
 
 import (
 	"fmt"
@@ -15,18 +15,6 @@ type LogDebug struct {
 	IfPrintln bool
 }
 
-//var IfPrintln bool=false
-
-// 代码复制到项目即可，不需要导入包。
-//TODO：log serve
-// logDebug or not,true is on ,false is off
-//var ifprint bool = false
-//var logz = NewLogDebug(ifprint)
-
-func NewLogDebug(ifprintln bool) *LogDebug {
-	return &LogDebug{ifprintln}
-}
-
 // about depth:please find api :package runtime
 //output func name ,file name,line num
 func fileLine(depth int) (string, string, int) {
@@ -39,6 +27,18 @@ func fileLine(depth int) (string, string, int) {
 		funcname = runtime.FuncForPC(pc).Name()
 	}
 	return funcname, file, line
+}
+
+//var IfPrintln bool=false
+
+// 代码复制到项目即可，不需要导入包。
+//TODO：log serve
+// logDebug or not,true is on ,false is off
+//var ifprint bool = false
+//var logz = NewLogDebug(ifprint)
+
+func NewLogDebug(ifprintln bool) *LogDebug {
+	return &LogDebug{ifprintln}
 }
 
 // 断点调试，显示行号和列号,以及函数名，方便断点调试
@@ -126,4 +126,47 @@ func (ll *LogDebug) Error(err error, t ...interface{}) {
 	fmt.Printf(" %c[1;40;32m%v%c[0m\n", 0x1B, err, 0x1B)
 	fmt.Println(fmt.Sprintf("%+v\n", t))
 	//	fmt.Printf("[%s,ERROR]:%s:%d\n",now.Format(TIME_FORMAT),file,line)
+}
+
+/*
+func FormatLogz(mode int) string {
+	var level string
+	now := time.Now()
+
+	funcname, file, line := fileLine(2)
+
+	slash := strings.LastIndex(file, "/")
+	if slash >= 0 {
+		file = file[slash+1:]
+	}
+
+	slash2 := strings.LastIndex(funcname, "/")
+	if slash2 >= 0 {
+		funcname = funcname[slash2+1:]
+	}
+
+	switch mode
+	// print,debug
+	case 0
+	level="[print]"
+	// info
+	case 1
+	level="[info]"
+	// warn
+	case 2
+	level="[warn]"
+	// error
+	case 2
+}
+*/
+
+func (ll *LogDebug) Debug(t ...interface{}) {
+	return
+}
+func (ll *LogDebug) Warn(t ...interface{}) {
+	return
+}
+
+func (ll *LogDebug) Panic(t ...interface{}) {
+	return
 }

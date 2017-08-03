@@ -1,4 +1,4 @@
-package logz
+package logd
 
 import (
 	"errors"
